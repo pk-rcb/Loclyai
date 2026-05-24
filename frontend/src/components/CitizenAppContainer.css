@@ -1,0 +1,203 @@
+/* ============================================
+   CITIZEN APP CONTAINER — Layout Shell
+   Persistent header + main content area
+   ============================================ */
+
+.citizen-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-subtle, #f8fafc);
+}
+
+/* ---- Global Header ---- */
+.citizen-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-light, #e2e8f0);
+  padding: 0 1rem;
+}
+
+.citizen-header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+/* Brand */
+.citizen-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.citizen-brand-icon {
+  font-size: 1.4rem;
+}
+
+.citizen-brand-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main, #0f172a);
+  letter-spacing: -0.02em;
+}
+
+/* Header action buttons */
+.citizen-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.citizen-header-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--bg-muted, #f1f5f9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.citizen-header-btn:hover {
+  background: var(--border-light, #e2e8f0);
+}
+
+.citizen-header-btn-icon {
+  font-size: 1.15rem;
+}
+
+/* Notification dot */
+.citizen-notif-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Profile avatar */
+.citizen-profile-btn {
+  background: var(--primary, #7c3aed);
+}
+
+.citizen-profile-btn:hover {
+  background: var(--primary-hover, #6d28d9);
+}
+
+.citizen-avatar {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* ---- Main Content ---- */
+.citizen-main {
+  flex: 1;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+}
+
+/* ---- User Dropdown Menu ---- */
+.citizen-user-menu-wrapper {
+  position: relative;
+}
+
+.citizen-user-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  background: #ffffff;
+  border: 1px solid var(--border-light, #e2e8f0);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+  animation: menuFadeIn 0.2s ease;
+  overflow: hidden;
+}
+
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.citizen-user-menu-header {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.citizen-user-menu-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main, #0f172a);
+}
+
+.citizen-user-menu-email {
+  font-size: 0.8rem;
+  color: var(--text-muted, #64748b);
+}
+
+.citizen-user-menu-divider {
+  height: 1px;
+  background: var(--border-light, #e2e8f0);
+}
+
+.citizen-user-menu-item {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-main, #0f172a);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.citizen-user-menu-item:hover {
+  background: var(--bg-muted, #f1f5f9);
+}
+
+.citizen-user-menu-logout {
+  color: #ef4444;
+}
+
+.citizen-user-menu-logout:hover {
+  background: #fef2f2;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 480px) {
+  .citizen-header-inner {
+    height: 50px;
+  }
+
+  .citizen-brand-text {
+    font-size: 1.1rem;
+  }
+
+  .citizen-main {
+    padding: 1rem 0.75rem 1.5rem;
+  }
+}

@@ -1,0 +1,72 @@
+# Node.js dependencies, builds, and caches
+**/node_modules/
+**/dist/
+**/.next/
+**/.nuxt/
+**/out/
+**/.serverless/
+**/.dynamodb/
+**/.eslintcache
+**/.parcel-cache
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.yarn/
+
+# Local environment variables and secrets (Fortress Protection)
+**/*.env
+**/*.env.*
+**/.env.*
+**/credentials.json
+**/client_secret*.json
+**/.serverless/
+**/secrets.json
+
+# Certificates and Private/Public Keys
+**/*.pem
+**/*.key
+**/*.pub
+**/*.pfx
+**/*.p12
+**/*.pkcs12
+**/*.cert
+**/*.crt
+**/*.der
+**/*.p7b
+**/*.p7c
+**/*.keystore
+**/*.jks
+
+# Database files (excluding schema migrations)
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+**/*.db-journal
+**/dump.sql
+**/backup.sql
+
+# User uploads (keep directory with .gitkeep but ignore files)
+**/uploads/*
+!**/uploads/.gitkeep
+
+# Python caches, virtual environments, and Jupyter
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.ipynb_checkpoints
+.venv/
+env/
+venv/
+ENV/
+
+# System and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

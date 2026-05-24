@@ -1,0 +1,478 @@
+/* ============================================
+   AUTHORITY AUTH PAGE — Vanilla CSS
+   Professional deep-green/slate theme,
+   mobile-first, responsive
+   ============================================ */
+
+/* ---- Color tokens (scoped to this page) ---- */
+.authority-page {
+  --auth-primary: #0f766e;       /* Deep teal-green */
+  --auth-primary-hover: #0d6e67;
+  --auth-primary-light: #ccfbf1;
+  --auth-accent: #115e59;
+  --auth-accent-light: #f0fdfa;
+  --auth-surface: #ffffff;
+  --auth-bg: #f1f5f9;
+  --auth-text: #0f172a;
+  --auth-text-muted: #64748b;
+  --auth-text-subtle: #94a3b8;
+  --auth-border: #e2e8f0;
+  --auth-border-focus: rgba(15, 118, 110, 0.5);
+  --auth-error: #dc2626;
+  --auth-success-bg: #ecfdf5;
+  --auth-success-border: #a7f3d0;
+  --auth-success-text: #065f46;
+}
+
+/* ---- Page Background ---- */
+.authority-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(160deg, #e8f5f3 0%, #f1f5f9 50%, #f8fafc 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid pattern overlay */
+.authority-bg-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 118, 110, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 118, 110, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Decorative background blobs */
+.authority-bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.authority-bg-shape-1 {
+  width: 420px;
+  height: 420px;
+  top: -140px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(15, 118, 110, 0.08) 0%, transparent 70%);
+}
+
+.authority-bg-shape-2 {
+  width: 320px;
+  height: 320px;
+  bottom: -80px;
+  right: -60px;
+  background: radial-gradient(circle, rgba(17, 94, 89, 0.06) 0%, transparent 70%);
+}
+
+/* ---- Auth Card ---- */
+.authority-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--auth-surface);
+  border-radius: 1.5rem;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 12px 30px rgba(0, 0, 0, 0.07);
+  padding: 2.5rem 2rem 2rem;
+  position: relative;
+  z-index: 1;
+  border-top: 4px solid var(--auth-primary);
+  animation: authorityCardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes authorityCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- Logo / Branding ---- */
+.authority-logo-link {
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.authority-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.authority-logo-icon {
+  font-size: 2rem;
+}
+
+.authority-logo-text {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--auth-text);
+  letter-spacing: -0.02em;
+}
+
+.authority-portal-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.3rem 1rem;
+  background: var(--auth-primary-light);
+  color: var(--auth-primary);
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ---- Tab Switcher ---- */
+.authority-tabs {
+  display: flex;
+  position: relative;
+  background: var(--auth-bg);
+  border-radius: 0.75rem;
+  padding: 4px;
+  margin-bottom: 1.75rem;
+}
+
+.authority-tab {
+  flex: 1;
+  padding: 0.65rem 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--auth-text-muted);
+  cursor: pointer;
+  border-radius: 0.6rem;
+  position: relative;
+  z-index: 2;
+  transition: color 0.25s ease;
+}
+
+.authority-tab-active {
+  color: var(--auth-primary);
+}
+
+/* Animated sliding indicator */
+.authority-tab-indicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background: var(--auth-surface);
+  border-radius: 0.6rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  z-index: 1;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Success Message ---- */
+.authority-success {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--auth-success-bg);
+  color: var(--auth-success-text);
+  border: 1px solid var(--auth-success-border);
+  border-radius: 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  animation: aFadeIn 0.3s ease;
+}
+
+.authority-success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+@keyframes aFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Form ---- */
+.authority-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.aform-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  animation: aFieldEnter 0.35s ease forwards;
+}
+
+@keyframes aFieldEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Highlighted group (access code field) */
+.aform-group-highlight {
+  background: var(--auth-accent-light);
+  border: 1px dashed rgba(15, 118, 110, 0.3);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.aform-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.aform-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--auth-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.aform-required {
+  font-size: 0.7rem;
+  color: var(--auth-primary);
+  background: var(--auth-primary-light);
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+}
+
+.aform-hint {
+  font-size: 0.78rem;
+  color: var(--auth-text-subtle);
+  line-height: 1.3;
+}
+
+.authority-forgot-link {
+  font-size: 0.8rem;
+  color: var(--auth-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.authority-forgot-link:hover {
+  color: var(--auth-primary-hover);
+  text-decoration: underline;
+}
+
+/* ---- Input Fields ---- */
+.aform-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--auth-border);
+  border-radius: 0.65rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--auth-text);
+  background: var(--auth-surface);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.aform-input::placeholder {
+  color: var(--auth-text-subtle);
+}
+
+.aform-input:focus {
+  border-color: var(--auth-primary);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
+
+.aform-input:disabled {
+  background: var(--auth-bg);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Access code input — slightly different style */
+.aform-input-code {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.aform-input-error {
+  border-color: var(--auth-error);
+}
+
+.aform-input-error:focus {
+  border-color: var(--auth-error);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* ---- Validation Error Text ---- */
+.aform-error {
+  font-size: 0.8rem;
+  color: var(--auth-error);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  animation: aFadeIn 0.25s ease;
+}
+
+/* ---- Submit Button ---- */
+.authority-submit-btn {
+  width: 100%;
+  padding: 0.9rem;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--auth-primary), var(--auth-accent));
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+}
+
+.authority-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+}
+
+.authority-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.authority-submit-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/* ---- CSS Spinner ---- */
+.authority-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: aSpin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes aSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Footer Toggle Text ---- */
+.authority-footer-text {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--auth-text-muted);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.authority-inline-link {
+  background: none;
+  border: none;
+  color: var(--auth-primary);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.authority-inline-link:hover {
+  color: var(--auth-primary-hover);
+}
+
+/* ---- Citizen Redirect ---- */
+.authority-citizen-redirect {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--auth-text-subtle);
+  margin-top: 0.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--auth-border);
+}
+
+.authority-citizen-link {
+  color: var(--auth-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.authority-citizen-link:hover {
+  text-decoration: underline;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 480px) {
+  .authority-page {
+    padding: 1rem 0.75rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .authority-card {
+    padding: 2rem 1.25rem 1.5rem;
+    border-radius: 1.25rem;
+  }
+
+  .authority-logo-text {
+    font-size: 1.5rem;
+  }
+
+  .authority-tab {
+    font-size: 0.88rem;
+  }
+
+  .aform-input {
+    padding: 0.75rem 0.85rem;
+    font-size: 1rem; /* Prevents iOS zoom on focus */
+  }
+
+  .authority-submit-btn {
+    padding: 1rem;
+  }
+
+  .aform-group-highlight {
+    padding: 0.75rem;
+  }
+}

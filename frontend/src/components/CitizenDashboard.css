@@ -1,0 +1,409 @@
+/* ============================================
+   CITIZEN DASHBOARD — Styles
+   Welcome banner, CTA button, complaint cards,
+   status tracking, withdraw, expanded details
+   ============================================ */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: dashFadeIn 0.4s ease;
+}
+
+@keyframes dashFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Welcome Section ---- */
+.dashboard-welcome {
+  background: linear-gradient(135deg, var(--primary, #7c3aed), var(--secondary, #ec4899));
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.welcome-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.welcome-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.welcome-stats {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  text-align: center;
+  min-width: 80px;
+}
+
+.stat-card-accent {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  color: white;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+/* ---- New Report CTA Button ---- */
+.new-report-btn {
+  width: 100%;
+  padding: 1.15rem;
+  background: linear-gradient(135deg, var(--primary, #7c3aed), var(--secondary, #ec4899));
+  color: white;
+  border: none;
+  border-radius: 1rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
+  transition: all 0.25s ease;
+}
+
+.new-report-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(124, 58, 237, 0.45);
+}
+
+.new-report-btn:active {
+  transform: translateY(0);
+}
+
+.new-report-icon {
+  font-size: 1.25rem;
+}
+
+/* ---- Empty State ---- */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted, #64748b);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state-text {
+  font-size: 1rem;
+  color: var(--text-muted, #64748b);
+}
+
+/* ---- Complaint History ---- */
+.history-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main, #0f172a);
+  margin-bottom: 0.75rem;
+}
+
+.complaint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ---- Complaint Card ---- */
+.complaint-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light, #e2e8f0);
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.complaint-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.complaint-card-expanded {
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.12);
+  border-color: var(--primary, #7c3aed);
+}
+
+.complaint-main-row {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Thumbnail */
+.complaint-thumb {
+  width: 56px;
+  height: 56px;
+  background: var(--bg-muted, #f1f5f9);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.complaint-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.complaint-thumb-emoji {
+  font-size: 1.5rem;
+}
+
+/* Details */
+.complaint-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.complaint-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.complaint-type {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main, #0f172a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.complaint-location {
+  font-size: 0.82rem;
+  color: var(--text-muted, #64748b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status Badges */
+.complaint-status {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-pending {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.badge-resolved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-progress {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-withdrawn {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* Meta row */
+.complaint-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-subtle, #94a3b8);
+}
+
+.complaint-confidence {
+  color: var(--primary, #7c3aed);
+  font-weight: 600;
+}
+
+/* ---- Expanded Details ---- */
+.complaint-expanded {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light, #e2e8f0);
+  animation: expandIn 0.3s ease;
+}
+
+@keyframes expandIn {
+  from { opacity: 0; max-height: 0; }
+  to   { opacity: 1; max-height: 500px; }
+}
+
+/* Status Timeline */
+.status-timeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 0;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-subtle, #94a3b8);
+}
+
+.timeline-step-done {
+  color: var(--primary, #7c3aed);
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--border-light, #e2e8f0);
+  border: 2px solid var(--border-light, #e2e8f0);
+  transition: all 0.3s ease;
+}
+
+.timeline-step-done .timeline-dot {
+  background: var(--primary, #7c3aed);
+  border-color: var(--primary, #7c3aed);
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
+}
+
+.timeline-line {
+  width: 50px;
+  height: 2px;
+  background: var(--border-light, #e2e8f0);
+  margin: 0 0.25rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Expanded Info Rows */
+.expanded-info-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.expanded-label {
+  font-weight: 600;
+  color: var(--text-main, #0f172a);
+  white-space: nowrap;
+}
+
+.expanded-value {
+  color: var(--text-muted, #64748b);
+}
+
+/* Withdraw Button */
+.withdraw-btn {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: #fff;
+  color: #dc2626;
+  border: 1.5px solid #fecaca;
+  border-radius: 0.75rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.withdraw-btn:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+.withdraw-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 600px) {
+  .dashboard-welcome {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.25rem;
+  }
+
+  .welcome-title {
+    font-size: 1.25rem;
+  }
+
+  .welcome-stats {
+    width: 100%;
+  }
+
+  .stat-card {
+    flex: 1;
+  }
+
+  .new-report-btn {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  .timeline-line {
+    width: 30px;
+  }
+}

@@ -1,0 +1,228 @@
+/* ============================================
+   ERROR PAGES — Shared Styles
+   Common layout, typography, and buttons for
+   NotFound404 and AccessDenied403 pages.
+   ============================================ */
+
+/* ---- Page Container ---- */
+.error-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 404 uses a cool purple/blue vibe */
+.error-404 {
+  background: linear-gradient(160deg, #eef2ff 0%, #f1f5f9 50%, #f8fafc 100%);
+}
+
+/* 403 uses a warmer, more serious amber/red tone */
+.error-403 {
+  background: linear-gradient(160deg, #fef3c7 0%, #fef9ee 50%, #fffbeb 100%);
+}
+
+/* Decorative background blobs */
+.error-bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.error-404 .error-bg-1 {
+  width: 400px;
+  height: 400px;
+  top: -120px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.07) 0%, transparent 70%);
+}
+
+.error-404 .error-bg-2 {
+  width: 350px;
+  height: 350px;
+  bottom: -100px;
+  left: -60px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+}
+
+.error-403 .error-bg-1 {
+  width: 400px;
+  height: 400px;
+  top: -120px;
+  left: -80px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+}
+
+.error-403 .error-bg-2 {
+  width: 350px;
+  height: 350px;
+  bottom: -100px;
+  right: -60px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.06) 0%, transparent 70%);
+}
+
+/* ---- Error Card ---- */
+.error-card {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 3rem 2rem 2.5rem;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 12px 30px rgba(0, 0, 0, 0.06);
+  animation: errorCardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes errorCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- Error Code (404 / 403) ---- */
+.error-code-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.error-code {
+  font-size: clamp(5rem, 15vw, 8rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+/* 404 gradient text — purple/indigo */
+.error-code-404 .error-code {
+  background-image: linear-gradient(135deg, #a78bfa, #6366f1);
+}
+
+/* 403 gradient text — amber/red */
+.error-code-403 .error-code {
+  background-image: linear-gradient(135deg, #f59e0b, #ef4444);
+}
+
+.error-icon {
+  position: absolute;
+  bottom: 5px;
+  right: -20px;
+  font-size: 2.5rem;
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ---- Typography ---- */
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main, #0f172a);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.error-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* ---- Shared Button Base ---- */
+.error-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Primary (404): purple gradient */
+.error-btn-primary {
+  background: linear-gradient(135deg, var(--primary, #7c3aed), #6366f1);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+}
+
+.error-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+}
+
+/* Warning (403): amber/red gradient */
+.error-btn-warning {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+.error-btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+}
+
+/* ---- Secondary Link ---- */
+.error-link {
+  display: block;
+  margin-top: 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.error-link:hover {
+  color: var(--primary, #7c3aed);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 480px) {
+  .error-card {
+    padding: 2.5rem 1.25rem 2rem;
+    border-radius: 1.25rem;
+  }
+
+  .error-title {
+    font-size: 1.25rem;
+  }
+
+  .error-btn {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .error-icon {
+    right: -10px;
+    font-size: 2rem;
+  }
+}
