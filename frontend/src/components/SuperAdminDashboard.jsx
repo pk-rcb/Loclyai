@@ -19,7 +19,7 @@ const SuperAdminDashboard = () => {
 
   const fetchPendingAuthorities = async () => {
     try {
-      const res = await fetch('${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/superadmin/pending-authorities', {
+      const res = await fetch(`\${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/superadmin/pending-authorities`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
