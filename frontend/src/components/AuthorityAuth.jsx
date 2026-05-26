@@ -67,12 +67,13 @@ const AuthorityAuth = () => {
   const fetchPincodeData = async (pin) => {
     setIsLoadingLocation(true);
     try {
-      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
-      const data = await res.json();
-      if (data && data[0].Status === 'Success') {
-        const offices = data[0].PostOffice;
-        setStateName(offices[0].State);
-        setDistrict(offices[0].District);
+      const res = await fetch(`https://api.zippopotam.us/in/${pin}`);
+      if (res.ok) {
+        const data = await res.json();
+        const state = data.places[0].state;
+        const offices = data.places.map(p => ({ Name: p['place name'] }));
+        setStateName(state);
+        setDistrict(state); // fallback district to state name as zippopotamus doesn't provide district
         setPostOffices(offices);
       } else {
         setErrors((prev) => ({ ...prev, pincode: 'Invalid Pincode' }));
@@ -82,6 +83,10 @@ const AuthorityAuth = () => {
       }
     } catch (err) {
       console.error(err);
+      setErrors((prev) => ({ ...prev, pincode: 'Failed to fetch location data' }));
+      setStateName('');
+      setDistrict('');
+      setPostOffices([]);
     } finally {
       setIsLoadingLocation(false);
     }
@@ -131,7 +136,7 @@ const AuthorityAuth = () => {
         ? { email, password }
         : { fullName, email, phone, employeeId, pincode, state: stateName, district, municipality, ward, password };
 
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

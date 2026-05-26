@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       const userType = user?.type || 'citizen';
-      await fetch(`http://localhost:5000/api/${userType}/logout`, {
+      await fetch(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/${userType}/logout`, {
         method: 'POST',
         credentials: 'include',
       });

@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # 1. The Geospatial Database
+  db:
+    image: postgis/postgis:15-3.3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_secure_password
+      POSTGRES_DB: loclyai_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. The Machine Learning Engine
+  ml-service:
+    build: ./mlmodel
+    ports:
+      - "8000:8000"
+    # Wait for the DB to be ready before starting
+    depends_on:
+      - db 
+
+  # 3. The Node.js Main API
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:your_secure_password@db:5432/loclyai_db
+      - ML_API_URL=http://ml-service:8000/predict
+    depends_on:
+      - db
+      - ml-service
+
+volumes:
+  postgres_data:

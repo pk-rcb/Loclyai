@@ -18,7 +18,7 @@ import { getAccessToken } from '../utils/api.js';
  * @param {Function} onCancel   - Called when user taps "Back"
  */
 
-const ML_API_URL = 'http://localhost:8000';
+const ML_API_URL = import.meta.env.VITE_ML_API_URL || 'https://pk-rcb-loclyai-engine.hf.space';
 
 const SmartReporter = ({ onComplete, onCancel }) => {
   // ---- Step state machine ----
@@ -313,7 +313,7 @@ const SmartReporter = ({ onComplete, onCancel }) => {
 
       const token = getAccessToken();
       
-      const response = await fetch('http://localhost:5000/api/reports', {
+      const response = await fetch('${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports', {
         method: 'POST',
         body: formData,
         headers: {

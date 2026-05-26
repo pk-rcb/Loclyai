@@ -19,7 +19,7 @@ const AuthorityDashboard = () => {
   const fetchReports = async () => {
     try {
       const token = getAccessToken();
-      const res = await fetch('http://localhost:5000/api/reports/authority/my-area', {
+      const res = await fetch('${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/authority/my-area', {
         headers: { 'Authorization': `Bearer ${token}` },
         credentials: 'include'
       });
@@ -81,7 +81,7 @@ const AuthorityDashboard = () => {
     setIsProcessing(true);
     try {
       const token = getAccessToken();
-      const res = await fetch(`http://localhost:5000/api/reports/${id}/${action}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/${id}/${action}`, {
         method: 'PATCH',
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -167,7 +167,16 @@ const AuthorityDashboard = () => {
               <div className="auth-card-main">
                 <div className="auth-card-thumb">
                   {report.image_url ? (
-                    <img src={`http://localhost:5000${report.image_url}`} alt="Hazard" />
+                    <img 
+                      src={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${report.image_url}`} 
+                      alt="Hazard" 
+                      onError={(e) => {
+                        if (!e.target.dataset.retried) {
+                          e.target.dataset.retried = 'true';
+                          e.target.src = `https://loclyai-backend.onrender.com${report.image_url}`;
+                        }
+                      }}
+                    />
                   ) : (
                     <span>📸</span>
                   )}
@@ -198,7 +207,16 @@ const AuthorityDashboard = () => {
                     {/* Image Column */}
                     <div className="auth-expanded-img">
                       {report.image_url && (
-                        <img src={`http://localhost:5000${report.image_url}`} alt="Full Hazard" />
+                        <img 
+                          src={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${report.image_url}`} 
+                          alt="Full Hazard" 
+                          onError={(e) => {
+                            if (!e.target.dataset.retried) {
+                              e.target.dataset.retried = 'true';
+                              e.target.src = `https://loclyai-backend.onrender.com${report.image_url}`;
+                            }
+                          }}
+                        />
                       )}
                     </div>
                     

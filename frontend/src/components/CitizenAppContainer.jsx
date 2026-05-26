@@ -31,7 +31,7 @@ const CitizenAppContainer = () => {
   const fetchComplaints = async () => {
     try {
       const token = getAccessToken();
-      const res = await fetch('http://localhost:5000/api/reports/my-reports', {
+      const res = await fetch('${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/my-reports', {
         headers: { 'Authorization': `Bearer ${token}` },
         credentials: 'include'
       });
@@ -46,7 +46,7 @@ const CitizenAppContainer = () => {
           location: r.address_display || `${r.ward || ''}, ${r.municipality || ''}`,
           confidence: 99, // mock or parse from desc
           thumbnail: '📸',
-          imageUrl: r.image_url ? `http://localhost:5000${r.image_url}` : null,
+          imageUrl: r.image_url ? `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${r.image_url}` : null,
           authorityName: r.authority_name,
           authorityNotes: r.authority_notes,
           resolvedAt: r.resolved_at

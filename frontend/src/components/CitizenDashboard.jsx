@@ -51,7 +51,7 @@ const CitizenDashboard = ({ complaints, onNewReport, onRefresh }) => {
     setWithdrawingId(reportId);
     try {
       const token = getAccessToken();
-      const res = await fetch(`http://localhost:5000/api/reports/${reportId}/withdraw`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/${reportId}/withdraw`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
         credentials: 'include'
@@ -128,7 +128,17 @@ const CitizenDashboard = ({ complaints, onNewReport, onRefresh }) => {
                   {/* Thumbnail */}
                   <div className="complaint-thumb">
                     {complaint.imageUrl ? (
-                      <img src={complaint.imageUrl} alt="Report" className="complaint-thumb-img" />
+                      <img 
+                        src={complaint.imageUrl} 
+                        alt="Report" 
+                        className="complaint-thumb-img"
+                        onError={(e) => {
+                          if (!e.target.dataset.retried) {
+                            e.target.dataset.retried = 'true';
+                            e.target.src = complaint.imageUrl.replace('${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}', 'https://loclyai-backend.onrender.com');
+                          }
+                        }}
+                      />
                     ) : (
                       <span className="complaint-thumb-emoji">{complaint.thumbnail}</span>
                     )}
