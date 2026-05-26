@@ -168,7 +168,7 @@ const AuthorityDashboard = () => {
                 <div className="auth-card-thumb">
                   {report.image_url ? (
                     <img 
-                      src={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${report.image_url}`} 
+                      src={report.image_url.startsWith('data:') ? report.image_url : `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${report.image_url}`} 
                       alt="Hazard" 
                       onError={(e) => {
                         if (!e.target.dataset.retried) {
@@ -208,7 +208,7 @@ const AuthorityDashboard = () => {
                     <div className="auth-expanded-img">
                       {report.image_url && (
                         <img 
-                          src={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${report.image_url}`} 
+                          src={report.image_url.startsWith('data:') ? report.image_url : `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}${report.image_url}`} 
                           alt="Full Hazard" 
                           onError={(e) => {
                             if (!e.target.dataset.retried) {
