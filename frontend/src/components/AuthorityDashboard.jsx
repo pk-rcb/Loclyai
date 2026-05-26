@@ -19,7 +19,7 @@ const AuthorityDashboard = () => {
   const fetchReports = async () => {
     try {
       const token = getAccessToken();
-      const res = await fetch(`\${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/authority/my-area`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/authority/my-area`, {
         headers: { 'Authorization': `Bearer ${token}` },
         credentials: 'include'
       });

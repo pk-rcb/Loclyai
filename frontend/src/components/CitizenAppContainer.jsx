@@ -31,7 +31,7 @@ const CitizenAppContainer = () => {
   const fetchComplaints = async () => {
     try {
       const token = getAccessToken();
-      const res = await fetch(`\${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/my-reports`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports/my-reports`, {
         headers: { 'Authorization': `Bearer ${token}` },
         credentials: 'include'
       });

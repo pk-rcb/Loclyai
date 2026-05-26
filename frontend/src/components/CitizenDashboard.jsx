@@ -135,7 +135,7 @@ const CitizenDashboard = ({ complaints, onNewReport, onRefresh }) => {
                         onError={(e) => {
                           if (!e.target.dataset.retried) {
                             e.target.dataset.retried = 'true';
-                            e.target.src = complaint.imageUrl.replace(`\${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}`, 'https://loclyai-backend.onrender.com');
+                            e.target.src = complaint.imageUrl.replace(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}`, 'https://loclyai-backend.onrender.com');
                           }
                         }}
                       />

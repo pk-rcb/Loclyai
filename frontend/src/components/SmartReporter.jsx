@@ -313,7 +313,7 @@ const SmartReporter = ({ onComplete, onCancel }) => {
 
       const token = getAccessToken();
       
-      const response = await fetch(`\${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/api/reports`, {
         method: 'POST',
         body: formData,
         headers: {
