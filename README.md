@@ -3,6 +3,7 @@
 LoclyAI is an advanced, AI-powered full-stack civic reporting system designed to streamline communication between citizens and local authorities. Utilizing standard web technologies paired with cutting-edge computer vision, LoclyAI automatically detects, classifies, and tracks municipal issues like potholes, illegal garbage dumping, broken streetlights, and structural damage in real-time.
 
 ---
+live demo click here --------👉https://loclyai-frontend.vercel.app/
 
 ## 🚀 Key Features
 
