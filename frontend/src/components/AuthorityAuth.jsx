@@ -60,33 +60,46 @@ const AuthorityAuth = () => {
     } else {
       setStateName('');
       setDistrict('');
+      setMunicipality('');
       setPostOffices([]);
     }
   }, [pincode]);
 
   const fetchPincodeData = async (pin) => {
     setIsLoadingLocation(true);
+    setErrors((prev) => ({ ...prev, pincode: null }));
     try {
-      const res = await fetch(`https://api.zippopotam.us/in/${pin}`);
+      // India Post API — returns accurate State, District, Block, Division for every Indian pincode
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
       if (res.ok) {
         const data = await res.json();
-        const state = data.places[0].state;
-        const offices = data.places.map(p => ({ Name: p['place name'] }));
-        setStateName(state);
-        setDistrict(state); // fallback district to state name as zippopotamus doesn't provide district
-        setPostOffices(offices);
+        if (data[0].Status === 'Success' && data[0].PostOffice && data[0].PostOffice.length > 0) {
+          const firstPO = data[0].PostOffice[0];
+          const state = firstPO.State || '';
+          const dist = firstPO.District || '';
+          const offices = data[0].PostOffice.map(po => ({
+            Name: po.Name,
+            Block: po.Block,
+            Division: po.Division,
+          }));
+          setStateName(state);
+          setDistrict(dist);
+          setPostOffices(offices);
+          // Auto-select municipality from District (primary routing key)
+          if (dist) setMunicipality(dist);
+        } else {
+          setErrors((prev) => ({ ...prev, pincode: 'Pincode not found. Please check and try again.' }));
+          setStateName('');
+          setDistrict('');
+          setMunicipality('');
+          setPostOffices([]);
+        }
       } else {
-        setErrors((prev) => ({ ...prev, pincode: 'Invalid Pincode' }));
-        setStateName('');
-        setDistrict('');
-        setPostOffices([]);
+        setErrors((prev) => ({ ...prev, pincode: 'Could not fetch pincode data. Please enter details manually.' }));
       }
     } catch (err) {
       console.error(err);
-      setErrors((prev) => ({ ...prev, pincode: 'Failed to fetch location data' }));
-      setStateName('');
-      setDistrict('');
-      setPostOffices([]);
+      setErrors((prev) => ({ ...prev, pincode: 'Pincode API unavailable. Please enter details manually.' }));
     } finally {
       setIsLoadingLocation(false);
     }
@@ -302,35 +315,69 @@ const AuthorityAuth = () => {
                 {errors.pincode && <span className="aform-error">{errors.pincode}</span>}
               </div>
 
-              {stateName && district && (
+              {pincode.length === 6 && (
                 <div className="aform-group" style={{ display: 'flex', gap: '10px' }}>
                   <div style={{ flex: 1 }}>
-                    <label className="aform-label">State</label>
-                    <input type="text" className="aform-input" value={stateName} disabled />
+                    <label className="aform-label">State <span style={{ fontSize: '11px', color: '#6ee7b7', fontWeight: 400 }}>(auto)</span></label>
+                    <input
+                      type="text"
+                      className="aform-input"
+                      value={stateName}
+                      readOnly
+                      style={{ opacity: 0.75, cursor: 'default' }}
+                      placeholder="Auto-filled from pincode"
+                    />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <label className="aform-label">District</label>
-                    <input type="text" className="aform-input" value={district} disabled />
+                    <label className="aform-label">District <span style={{ fontSize: '11px', color: '#6ee7b7', fontWeight: 400 }}>(auto)</span></label>
+                    <input
+                      type="text"
+                      className="aform-input"
+                      value={district}
+                      readOnly
+                      style={{ opacity: 0.75, cursor: 'default' }}
+                      placeholder="Auto-filled from pincode"
+                    />
                   </div>
                 </div>
               )}
 
-              {postOffices.length > 0 && (
+              {pincode.length === 6 && (
                 <>
                   <div className="aform-group">
-                    <label htmlFor="authorityMunicipality" className="aform-label">Municipality</label>
-                    <select
-                      id="authorityMunicipality"
-                      className={`aform-input ${errors.municipality ? 'aform-input-error' : ''}`}
-                      value={municipality}
-                      onChange={(e) => setMunicipality(e.target.value)}
-                      disabled={isSubmitting}
-                    >
-                      <option value="">Select Municipality (Post Office)</option>
-                      {postOffices.map((po, idx) => (
-                        <option key={idx} value={po.Name}>{po.Name}</option>
-                      ))}
-                    </select>
+                    <label htmlFor="authorityMunicipality" className="aform-label">
+                      Municipality / District
+                      <span style={{ fontSize: '11px', color: '#6ee7b7', marginLeft: '6px', fontWeight: 400 }}>
+                        (auto-fetched — used for report routing)
+                      </span>
+                    </label>
+                    {postOffices.length > 0 ? (
+                      <select
+                        id="authorityMunicipality"
+                        className={`aform-input ${errors.municipality ? 'aform-input-error' : ''}`}
+                        value={municipality}
+                        onChange={(e) => setMunicipality(e.target.value)}
+                        disabled={isSubmitting}
+                      >
+                        {/* District is the top-level option and default — matches Nominatim geocode output */}
+                        <option value={district}>{district} (District — Recommended)</option>
+                        {postOffices.map((po, idx) => (
+                          <option key={idx} value={po.Name}>
+                            {po.Name}{po.Block && po.Block !== 'NA' ? ` (${po.Block})` : ''}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        id="authorityMunicipality"
+                        type="text"
+                        className={`aform-input ${errors.municipality ? 'aform-input-error' : ''}`}
+                        placeholder="e.g. Mumbai"
+                        value={municipality}
+                        onChange={(e) => setMunicipality(e.target.value)}
+                        disabled={isSubmitting}
+                      />
+                    )}
                     {errors.municipality && <span className="aform-error">{errors.municipality}</span>}
                   </div>
 

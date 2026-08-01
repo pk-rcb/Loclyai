@@ -64,12 +64,27 @@ router.post('/', authenticateToken, requireRole('citizen'), upload.single('image
       addressDisplay = geoData.display_name || `${ward}, ${municipality}, ${district}, ${state}`;
     }
 
-    // Try to find an authority matching this pincode
+    // Try to find an authority matching this report's location
+    // Priority 1: exact pincode match
+    // Priority 2: district name match (fallback when Nominatim doesn't return a postcode)
     let assignedAuthorityId = null;
     if (pincode) {
       const authorityResult = await pool.query(
         'SELECT id FROM authorities WHERE pincode = $1 AND is_approved = true LIMIT 1',
         [pincode]
+      );
+      if (authorityResult.rows.length > 0) {
+        assignedAuthorityId = authorityResult.rows[0].id;
+      }
+    }
+
+    if (!assignedAuthorityId && district && district !== 'Unknown District') {
+      const authorityResult = await pool.query(
+        `SELECT id FROM authorities 
+         WHERE (district ILIKE $1 OR municipality ILIKE $1) 
+           AND is_approved = true 
+         LIMIT 1`,
+        [`%${district}%`]
       );
       if (authorityResult.rows.length > 0) {
         assignedAuthorityId = authorityResult.rows[0].id;
