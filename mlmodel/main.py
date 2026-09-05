@@ -147,7 +147,7 @@ async def predict(file: UploadFile = File(...)):
 
     try:
         # Run YOLOv8 inference
-        results = model.predict(source=image, conf=0.25, verbose=False)
+        results = model.predict(source=image, conf=0.6, verbose=False)
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Model inference failed: {str(e)}"
