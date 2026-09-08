@@ -11,10 +11,33 @@ Run with:
 
 import io
 import os
+import asyncio
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from ultralytics import YOLO
+import google.generativeai as genai
+
+# ─── GEMINI SETUP ──────────────────────────────────────────────
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+else:
+    gemini_model = None
+
+async def verify_with_gemini(image: Image.Image, class_name: str) -> bool:
+    if not gemini_model:
+        return True
+    
+    prompt = f"A primary object detection model identified '{class_name}' in this image. Is there actually a genuine, clearly visible {class_name} present? Answer with only YES or NO."
+    try:
+        response = await gemini_model.generate_content_async([prompt, image])
+        answer = response.text.strip().upper()
+        return "YES" in answer
+    except Exception as e:
+        print(f"Gemini verification failed: {e}")
+        return True  # Fallback to YOLO if API fails
 
 # ─── APP SETUP ───────────────────────────────────────────────
 app = FastAPI(
@@ -159,6 +182,8 @@ async def predict(file: UploadFile = File(...)):
 
     if result.boxes is not None and len(result.boxes) > 0:
         img_w, img_h = image.size
+        
+        raw_detections = []
 
         for box in result.boxes:
             # Get coordinates (xyxy format) — normalized to 0-1 range
@@ -167,7 +192,7 @@ async def predict(file: UploadFile = File(...)):
             class_id = int(box.cls[0])
             class_name = model.names[class_id]
 
-            detections.append(
+            raw_detections.append(
                 {
                     "class_name": class_name,
                     "confidence": round(confidence, 1),
@@ -181,8 +206,17 @@ async def predict(file: UploadFile = File(...)):
                 }
             )
 
-    # Sort by confidence descending
-    detections.sort(key=lambda d: d["confidence"], reverse=True)
+        # Sort by confidence descending
+        raw_detections.sort(key=lambda d: d["confidence"], reverse=True)
+        
+        if raw_detections:
+            best_det = raw_detections[0]
+            is_valid = await verify_with_gemini(image, best_det["class_name"])
+            if is_valid:
+                detections = raw_detections
+            else:
+                print(f"Gemini rejected detection of {best_det['class_name']}")
+                detections = []
 
     return {
         "success": True,

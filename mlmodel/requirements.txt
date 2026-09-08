@@ -3,3 +3,4 @@ uvicorn[standard]
 ultralytics
 python-multipart
 Pillow
+google-generativeai
