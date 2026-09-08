@@ -32,19 +32,35 @@ else:
     gemini_model = None
     print("⚠️ Gemini verification DISABLED — no GEMINI_API_KEY found. Set it in .env or as an environment variable.")
 
-async def verify_with_gemini(image: Image.Image, class_name: str) -> bool:
+async def verify_with_gemini(image: Image.Image, class_name: str) -> str | None:
     if not gemini_model:
-        return True
+        return class_name
     
-    prompt = f"A primary object detection model identified '{class_name}' in this image. Is there actually a genuine, clearly visible {class_name} present? Answer with only YES or NO."
+    valid_classes = ["pothole", "garbage_pile", "sewage_leak", "fallen_traffic_sign", "damaged_electric_pole", "open_manhole"]
+    
+    prompt = f"""A primary object detection model identified '{class_name}' in this image.
+Is there actually a genuine, clearly visible '{class_name}' present? If yes, reply with '{class_name}'.
+If it is NOT a '{class_name}', but you clearly see one of the following OTHER civic issues, reply with the exact name of that issue:
+{', '.join(valid_classes)}
+If there are NO civic issues present at all (e.g. just a shadow, normal road, or background), reply with 'NONE'.
+Answer with ONLY the exact class name or 'NONE'."""
+
     try:
         response = await gemini_model.generate_content_async([prompt, image])
-        answer = response.text.strip().upper()
+        answer = response.text.strip().lower().replace(" ", "_").replace("'", "").replace('"', '')
         print(f"   Gemini raw answer: '{answer}'")
-        return "YES" in answer
+        
+        if class_name.lower() in answer:
+            return class_name
+            
+        for valid_class in valid_classes:
+            if valid_class.lower() in answer:
+                return valid_class
+                
+        return None
     except Exception as e:
         print(f"Gemini verification failed: {e}")
-        return True  # Fallback to YOLO if API fails
+        return class_name  # Fallback to YOLO if API fails
 
 # ─── APP SETUP ───────────────────────────────────────────────
 app = FastAPI(
@@ -220,9 +236,15 @@ async def predict(file: UploadFile = File(...)):
             best_det = raw_detections[0]
             print(f"🔍 YOLO detected: {best_det['class_name']} ({best_det['confidence']}%)")
             print(f"🤖 Sending to Gemini for verification...")
-            is_valid = await verify_with_gemini(image, best_det["class_name"])
-            if is_valid:
-                print(f"✅ Gemini CONFIRMED: {best_det['class_name']} is a real issue")
+            verified_class = await verify_with_gemini(image, best_det["class_name"])
+            
+            if verified_class is not None:
+                if verified_class != best_det["class_name"]:
+                    print(f"🔄 Gemini CORRECTED classification: {best_det['class_name']} -> {verified_class}")
+                    best_det["class_name"] = verified_class
+                    best_det["emoji"] = get_emoji(verified_class)
+                else:
+                    print(f"✅ Gemini CONFIRMED: {best_det['class_name']} is a real issue")
                 detections = raw_detections
             else:
                 print(f"❌ Gemini REJECTED: {best_det['class_name']} — false positive filtered out")
