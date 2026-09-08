@@ -12,19 +12,25 @@ Run with:
 import io
 import os
 import asyncio
+from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from ultralytics import YOLO
 import google.generativeai as genai
 
+# Load .env file (works locally; on HF Spaces, use Secrets)
+load_dotenv()
+
 # ─── GEMINI SETUP ──────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
-    gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+    gemini_model = genai.GenerativeModel('gemini-2.0-flash')
+    print(f"✅ Gemini verification ENABLED (key: ...{GEMINI_API_KEY[-6:]})")
 else:
     gemini_model = None
+    print("⚠️ Gemini verification DISABLED — no GEMINI_API_KEY found. Set it in .env or as an environment variable.")
 
 async def verify_with_gemini(image: Image.Image, class_name: str) -> bool:
     if not gemini_model:
@@ -34,6 +40,7 @@ async def verify_with_gemini(image: Image.Image, class_name: str) -> bool:
     try:
         response = await gemini_model.generate_content_async([prompt, image])
         answer = response.text.strip().upper()
+        print(f"   Gemini raw answer: '{answer}'")
         return "YES" in answer
     except Exception as e:
         print(f"Gemini verification failed: {e}")
@@ -211,11 +218,14 @@ async def predict(file: UploadFile = File(...)):
         
         if raw_detections:
             best_det = raw_detections[0]
+            print(f"🔍 YOLO detected: {best_det['class_name']} ({best_det['confidence']}%)")
+            print(f"🤖 Sending to Gemini for verification...")
             is_valid = await verify_with_gemini(image, best_det["class_name"])
             if is_valid:
+                print(f"✅ Gemini CONFIRMED: {best_det['class_name']} is a real issue")
                 detections = raw_detections
             else:
-                print(f"Gemini rejected detection of {best_det['class_name']}")
+                print(f"❌ Gemini REJECTED: {best_det['class_name']} — false positive filtered out")
                 detections = []
 
     return {
